@@ -5,15 +5,19 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
 import java.util.Objects;
-
 
 @Document(collection="book")
 public class Book {
+
 	@Id
 	private String id;
 
 	private String title;
+	private String description;
+	private BigDecimal price;
+	private Integer year;
 	private String author;
 
 	@Indexed(unique = true)
@@ -23,7 +27,6 @@ public class Book {
 	}
 
 	// Just limit to {"Spring", "Java", "Web"}
-	//just embed here
 	private String category;
 
 	public Book(String title, String author, String isbn, String category) {
@@ -84,12 +87,36 @@ public class Book {
 		this.category = category;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Book book = (Book) o;
-		return Objects.equals(id, book.id) &&
+		return Objects.equals(id, book.id) ||
 				Objects.equals(title, book.title) &&
 				Objects.equals(author, book.author) &&
 				Objects.equals(isbn, book.isbn) &&
