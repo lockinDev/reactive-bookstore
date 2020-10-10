@@ -15,8 +15,6 @@ import com.lockinDev.reactive.bookstore.DataInitializer.Category;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.annotation.PostConstruct;
-
 
 @Component
 public class DataInitializer {
