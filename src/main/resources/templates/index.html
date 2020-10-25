@@ -1,0 +1,27 @@
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{template/layout :: head('Welcome')}"></head>
+
+<body>
+<div id="wrap">
+    <div id="header" th:replace="~{template/layout :: header}" ></div>
+    <div class="center_content clearfix">
+        <div class="left_content" id="left_content" th:fragment="~{template/layout :: left_content}" >
+            <p>Welcome to the Book Store(in debug mode)</p>
+            <script type="text/javascript" th:inline="javascript">
+
+            </script>
+            <div class="scrollable">
+                <ul id="beans">
+                </ul>
+            </div>
+        </div>
+        <div class="right_content" id="right_content" th:replace="~{template/layout :: right_content}" ></div>
+        <div class="clear"></div>
+    </div> <!-- end of center_content -->
+
+</div>
+</body>
+</html>
