@@ -30,8 +30,51 @@
                 </ul>
             </div>
         </div>
+        <div class="center_content">
+            <div class="left_content" id="left_content" th:fragment="left_content">
+                <h1 id="pagetitle" th:text="#{index.caption}">PAGE TITLE</h1>
+            </div><!--end of left content-->
 
-        </div><!--end of right content-->
+            <div class="right_content" id="right_content" th:fragment="right_content">
+                <div class="right_box">
+                    <div class="title">
+                        <span class="title_icon"><img th:src="@{/static/images/bullet4.gif}" alt="" title="" /></span>
+                        <th:block th:text="#{main.title.randombooks}">Book Name</th:block>
+                    </div>
+                    <div id="randomBooks">
+                    </div>
+                    <script th:inline="javascript">
+                        /*<![CDATA[*/
+                        $(document).ready(function() {
+                            var formUrl = /*[[@{/book/random/}]]*/ '/book/random';
+                            $.ajax({
+                                url: formUrl,
+                                type: 'GET',
+                                success: function(responseData) { renderBooks(responseData);}
+                            });
+                            function renderBooks(books) {
+                                var content = '';
+                                var baseDetailUrl = /*[[@{/book/detail/}]]*/ '/book/detail';
+                                var bookImgUrl = /*[[@{/static/images/books/}]]*/ '/static/images/books';
+                                for (var i = 0; i<books.length; i++) {
+                                    content += '<div class="new_prod_box">';
+                                    content += ' <a href="'+baseDetailUrl + books[i].id+'">'+books[i].title+'</a>';
+                                    content += ' <div class="new_prod_img">';
+                                    content += '  <a href="' + baseDetailUrl + books[i].id+'">';
+                                    content += '     <img src="' + bookImgUrl + books[i].isbn + '/book_front_cover.png" class="thumb" border="0" width="100px" title="' + books[i].title +'" />';
+                                    content += '  </a>';
+                                    content += ' </div>'
+                                    content += '</div>'
+                                }
+                                $('#randomBooks').html(content);
+                            }
+                        });
+                        /*]]>*/
+                    </script>
+                </div>
+
+
+            </div><!--end of right content-->
             <div class="clear"></div>
         </div><!--end of center content-->
 
