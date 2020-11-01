@@ -85,5 +85,52 @@ public class BookstoreAppTest {
 				});
 	}
 
+	@Test
+	void shouldFailCreatingABook() {
+		Book book = new Book();
+		book.setTitle("TDD for dummies");
+		book.setAuthor("Test User");
 
+		testClient.post().uri("/book/isbn")
+				.body(Mono.just(book), Book.class).exchange()
+				.expectStatus().isBadRequest()
+				.expectBody()
+				.consumeWith(responseEntity -> {
+					logger.debug("Response: {}", responseEntity);
+				});
+	}
+
+	@Test
+	void shouldDeleteByIsbn(){
+		testClient.delete()
+				.uri(uriBuilder -> uriBuilder.path("/book/isbn/{isbn}").build("9781484230042"))
+				.accept(MediaType.APPLICATION_JSON)
+				.exchange()
+				.expectStatus().isNoContent();
+	}
+
+	@Test
+	void shouldNotDeleteByIsbn(){
+		testClient.delete()
+				.uri(uriBuilder -> uriBuilder.path("/book/isbn/{isbn}").build("978148423test"))
+				.accept(MediaType.APPLICATION_JSON)
+				.exchange()
+				.expectStatus().isNoContent();
+	}
+
+	@Test
+	public void shouldReturnTwoBooks(){
+		BookSearchCriteria criteria = new BookSearchCriteria();
+		criteria.setCategory(Book.Category.JAVA);
+
+		testClient.post()
+				.uri("/book/search")
+				.accept(MediaType.APPLICATION_JSON)
+				.body(Mono.just(criteria), BookSearchCriteria.class)
+				.exchange()
+				.expectStatus().isOk()
+				.expectHeader().contentType(MediaType.APPLICATION_JSON)
+				.expectBodyList(Book.class)
+				.hasSize(2);
+	}
 }
