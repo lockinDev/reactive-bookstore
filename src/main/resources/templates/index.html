@@ -11,7 +11,29 @@
         <div class="left_content" id="left_content" th:fragment="~{template/layout :: left_content}" >
             <p>Welcome to the Book Store(in debug mode)</p>
             <script type="text/javascript" th:inline="javascript">
-
+                /*<![CDATA[*/
+                var renderBeans = {
+                    source: new EventSource([[@{|/beans|}]]) ,
+                    start: function () {
+                         this.source.addEventListener("message", function (event) {
+                            console.log(event);
+                            $("#beans").append('<li>'+ event.data +'</li>')
+                        });
+                        this.source.onerror = function () {
+                            this.source.close();
+                        };
+                    },
+                    stop: function() {
+                        this.source.close();
+                    }
+                };
+                $( window ).on( "load", function() {
+                    renderBeans.start();
+                });
+                $( window ).on( "onbeforeunload", function() {
+                    renderBeans.stop();
+                });
+                /*]]>*/
             </script>
             <div class="scrollable">
                 <ul id="beans">

@@ -1,55 +1,89 @@
 
-package com.lockinDev.reactive.bookstore;
+package com.lockinDev.reactive.bookstore.api;
 
-import org.junit.FixMethodOrder;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.lockinDev.reactive.bookstore.Book;
+import com.lockinDev.reactive.bookstore.document.Book;
+import com.lockinDev.reactive.bookstore.util.BookSearchCriteria;
 
-import reactor.test.StepVerifier;
-import static org.hamcrest.CoreMatchers.*;
+import reactor.core.publisher.Mono;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
-@Disabled("For some reason these tests fail in the gradle build, run them only manually from IntelliJ IDEA")
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BookstoreAppTest {
+	private static Logger logger = LoggerFactory.getLogger(BookApiTest.class);
 
 	@Autowired
-	private WebTestClient client;
+	private WebTestClient testClient;
 
 	@Test
-	public void shouldReturnABook(){
-		client.get().uri("/books/{isbn}", "9780132350884")
+	void shouldFindByIsbn(){
+		testClient.get()
+				.uri(uriBuilder -> uriBuilder.path("/book/isbn/{isbn}").build("9781484230042"))
+				.accept(MediaType.APPLICATION_JSON)
 				.exchange()
 				.expectStatus().isOk()
-				.expectHeader().contentType(APPLICATION_JSON_VALUE)
+				.expectHeader().contentType(MediaType.APPLICATION_JSON)
 				.expectBody(Book.class)
-				.value(Book::getTitle, equalTo("Clean Code"));
+				.consumeWith(responseEntity -> {
+					logger.debug("Response: {}", responseEntity);
+					Book book = responseEntity.getResponseBody();
+					assertAll("book", () ->
+					{
+						assertNotNull(book);
+						assertAll("book",
+								() -> assertNotNull(book.getTitle()),
+								() -> assertNotEquals("", book.getAuthor()));
+					});
+				});
 	}
 
 	@Test
-	public void fetchAllBooks() {
-		FluxExchangeResult<Book> result = client.get().uri("/books")
+	void shouldFindByIsbnNot(){
+		testClient.get()
+				.uri(uriBuilder -> uriBuilder.path("/book/isbn/{isbn}").build("978148423test"))
 				.exchange()
-				.expectStatus().isOk()
-				.expectHeader().contentType("application/stream+json")
-				.returnResult(Book.class);
-
-		StepVerifier.create(result.getResponseBody())
-				.expectNextCount(3)
-				.verifyComplete();
+				.expectStatus().isNotFound();
 	}
+
+	@Test
+	void shouldCreateABook() {
+		Book book = new Book();
+		book.setTitle("TDD for dummies");
+		book.setAuthor("Test User");
+		book.setPrice(BigDecimal.valueOf(40.99));
+		book.setIsbn("12232434324");
+		book.setCategory("test");
+
+		testClient.post().uri("/book/isbn")
+				.body(Mono.just(book), Book.class)
+				.exchange()
+				.expectStatus().isCreated()
+				.expectHeader().contentType(MediaType.APPLICATION_JSON)
+				.expectHeader().exists("Location")
+				.expectBody(Book.class)
+				.consumeWith(responseEntity -> {
+					logger.debug("Response: {}", responseEntity);
+					assertAll("book", () ->
+					{
+						assertNotNull(book);
+						assertAll("book",
+								() -> assertNotNull(book.getIsbn()),
+								() -> assertEquals("test", book.getCategory()));
+					});
+				});
+	}
+
+
 }
