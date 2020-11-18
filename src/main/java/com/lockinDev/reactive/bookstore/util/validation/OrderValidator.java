@@ -7,7 +7,13 @@ import org.springframework.validation.Validator;
 import com.lockinDev.reactive.bookstore.document.Address;
 import com.lockinDev.reactive.bookstore.document.Order;
 
+/**
+ * Validates {@link Order} domain objects
+ * 
+ * @author Lockin
 
+ * 
+ */
 public class OrderValidator implements Validator {
 
 	@Override

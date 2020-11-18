@@ -5,7 +5,14 @@ import org.springframework.data.annotation.Transient;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+/**
+ * An order detail is the link table between {@link Order} and {@link Book} We also store how many books are ordered in
+ * the {@link #quantity} field
+ * 
+ * @author Lockin
 
+ * 
+ */
 @SuppressWarnings("serial")
 public class OrderDetail implements Serializable {
 

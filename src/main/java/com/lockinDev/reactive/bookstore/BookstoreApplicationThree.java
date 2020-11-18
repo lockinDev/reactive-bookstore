@@ -4,13 +4,17 @@ package com.lockinDev.reactive.bookstore;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import reactor.core.publisher.Hooks;
 
-
+/**
+ * Created by lockinDev on 22/07/2020
+ */
 @SpringBootApplication
-public class BookstoreApplicationOne {
+public class BookstoreApplicationThree {
 
 	public static void main(String... args) {
-		SpringApplication springApplication = new SpringApplication(BookstoreApplicationOne.class);
+		Hooks.onOperatorDebug();
+		SpringApplication springApplication = new SpringApplication(BookstoreApplicationThree.class);
 		springApplication.setWebApplicationType(WebApplicationType.REACTIVE);
 		springApplication.run(args);
 	}

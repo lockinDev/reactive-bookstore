@@ -3,7 +3,13 @@ package com.lockinDev.reactive.bookstore.document;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
+/**
+ * A component which resembles the address of a {@link Account}
+ * 
+ * @author Lockin
 
+ * 
+ */
 //@Embeddable
 @SuppressWarnings("serial")
 public class Address implements Serializable {

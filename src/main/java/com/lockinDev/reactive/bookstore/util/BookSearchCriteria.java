@@ -1,7 +1,9 @@
 
 package com.lockinDev.reactive.bookstore.util;
 
-
+/**
+ * Created by lockinDev on 27/07/2020
+ */
 public class BookSearchCriteria {
 
 	private String title;

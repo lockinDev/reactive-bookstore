@@ -15,7 +15,9 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sample;
 
 
-
+/**
+ * Created by lockinDev on 26/07/2020
+ */
 public class CustomBookRepositoryImpl implements  CustomBookRepository{
 
 	ReactiveMongoTemplate mongoTemplate;
@@ -24,7 +26,11 @@ public class CustomBookRepositoryImpl implements  CustomBookRepository{
 		this.mongoTemplate = mongoTemplate;
 	}
 
-	
+	/**
+	 *  Implements db.book.aggregate([{ $sample: { size: pageable.getPageSize() } }])
+	 * @param pageable
+	 * @return
+	 */
 	@Override
 	public Flux<Book> findRandom(Pageable pageable) {
 		Aggregation agg = newAggregation(sample(pageable.getPageSize()));

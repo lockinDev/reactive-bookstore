@@ -8,7 +8,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Basic implementation of a cart.
+ * 
+ * @author Lockin
+ *
+ */
 @SuppressWarnings("serial")
 public class Cart implements Serializable {
 

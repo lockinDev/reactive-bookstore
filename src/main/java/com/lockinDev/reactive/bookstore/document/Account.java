@@ -13,9 +13,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
+/**
+ * A account resembles an authenticated user of our system. A account is able to submit orders. A account is identified
+ * by his or her username. When authenticating the user supplies its username and password. Besides identification
+ * information we also store basic legal information such as address, firstname, lastname and email address.
+ *
+ * @author Lockin
 
+ *
+ */
 @Document(collection="account")
 @SuppressWarnings("serial")
 public class Account implements Serializable {

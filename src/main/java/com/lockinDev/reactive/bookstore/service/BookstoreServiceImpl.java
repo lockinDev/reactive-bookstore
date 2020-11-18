@@ -11,17 +11,21 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lockinDev.reactive.bookstore.document.*;
 import com.lockinDev.reactive.bookstore.repository.AccountRepository;
 import com.lockinDev.reactive.bookstore.repository.BookRepository;
+import com.lockinDev.reactive.bookstore.util.BookNewReleasesUtil;
 import com.lockinDev.reactive.bookstore.util.BookSearchCriteria;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-
+/**
+ * Created by lockinDev on 27/07/2020
+ */
 @Service
 @Transactional(readOnly = true)
 public class BookstoreServiceImpl implements  BookstoreService {
@@ -43,6 +47,11 @@ public class BookstoreServiceImpl implements  BookstoreService {
 	@Override
 	public Mono<Book> findBook(String id) {
 		return this.bookRepository.findById(id);
+	}
+
+	@Override
+	public Mono<Book> findBookByIsbn(String isbn) {
+		return this.bookRepository.findByIsbn(isbn);
 	}
 
 	@Override
@@ -100,25 +109,7 @@ public class BookstoreServiceImpl implements  BookstoreService {
 	}
 
 	@Override
-	public Mono<Book> findBookByIsbn(String isbn) {
-		return this.bookRepository.findByIsbn(isbn);
-	}
-
-	@Override
-	public Mono<Void> updateByIsbn(String bookIsbn, Mono<Book> bookMono) {
-		return bookRepository.findByIsbn(bookIsbn).doOnNext(
-				original ->
-					bookMono.doOnNext(
-							updatedBook -> {
-								original.setTitle(updatedBook.getTitle());
-								original.setAuthor(updatedBook.getAuthor());
-								original.setCategory(updatedBook.getCategory());
-								original.setPrice(updatedBook.getPrice());
-								original.setYear(updatedBook.getYear());
-								// this op should be enabled only for admin users
-								//original.setIsbn(updatedBook.getIsbn());
-								original.setDescription(updatedBook.getDescription());
-					})
-		).then(Mono.empty());
+	public Flux<Book> randomBookNews() {
+		return Flux.interval(Duration.ofSeconds(5)).map(delay -> BookNewReleasesUtil.randomRelease());
 	}
 }

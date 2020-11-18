@@ -4,7 +4,7 @@ logging:
   level:
     root: INFO
     org.springframework: INFO
-    com.lockinDev.reactive: DEBUG
+    com.lockinDev.reactive.bookstore: DEBUG
 
 spring:
   data:

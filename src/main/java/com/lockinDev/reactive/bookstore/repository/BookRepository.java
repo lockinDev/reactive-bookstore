@@ -10,7 +10,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 
-
+/**
+ * Created by lockinDev on 28/06/2020
+ */
 public interface BookRepository extends ReactiveMongoRepository<Book, String>, CustomBookRepository  {
 
 	@Query("{'category': { '$regex' : ?0 } }")

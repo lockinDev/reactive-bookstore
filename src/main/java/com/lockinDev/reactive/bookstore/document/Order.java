@@ -13,7 +13,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-
+/**
+ * @author lockinDev
+ */
 //@Embeddable
 public class Order {
 
@@ -113,7 +115,9 @@ public class Order {
 		return total;
 	}
 
-	
+	/**
+	 * Update the order details and update the total price. If the quantity is 0 or less the order detail is removed from the list.
+	 */
 	public void updateOrderDetails() {
 		BigDecimal total = BigDecimal.ZERO;
 		Iterator<OrderDetail> details = this.orderDetails.iterator();

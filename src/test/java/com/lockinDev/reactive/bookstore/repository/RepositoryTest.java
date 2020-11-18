@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
+import com.lockinDev.reactive.bookstore.controller.BookSearchController;
 import com.lockinDev.reactive.bookstore.document.*;
 import com.lockinDev.reactive.bookstore.repository.AccountRepository;
 import com.lockinDev.reactive.bookstore.repository.BookRepository;
@@ -24,7 +25,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * Created by lockinDev on 28/06/2020
+ */
 @DataMongoTest
 public class RepositoryTest {
 	private final Logger logger = LoggerFactory.getLogger(RepositoryTest.class);
@@ -34,8 +37,8 @@ public class RepositoryTest {
 
 	@BeforeEach
 	public void setup() {
-		var book1 = Book.create("Dummy Book One", BigDecimal.valueOf(23.39), 1983, "Dum Dum", "1111484227893", "Dum");
-		var book2 = Book.create("Dummy Book Two", BigDecimal.valueOf(30.99), 1974, "Dim Dim", "1111484229999", "Dim");
+		var book1 = new Book("Dummy Book One", BigDecimal.valueOf(23.39), 1983, "Dum Dum", "1111484227893", "Dum");
+		var book2 = new Book("Dummy Book Two", BigDecimal.valueOf(30.99), 1974, "Dim Dim", "1111484229999", "Dim");
 
 		Address address = new Address();
 		address.setStreet("Test Street");

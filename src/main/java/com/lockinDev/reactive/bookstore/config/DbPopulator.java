@@ -19,7 +19,9 @@ import static com.lockinDev.reactive.bookstore.document.Book.Category;
 import java.math.BigDecimal;
 import java.util.List;
 
-
+/**
+ * Created by lockinDev on 28/06/2020
+ */
 @Component
 public class DbPopulator {
 
@@ -38,20 +40,20 @@ public class DbPopulator {
 	@EventListener(ApplicationReadyEvent.class)
 	public void init(){
 		List<Book> books = List.of(
-				Book.create("Clean Code", BigDecimal.valueOf(37.44), 2008,"Robert C. Martin", "9780132350884", Category.WEB),
-				Book.create("Agile Software Development", BigDecimal.valueOf(54.99), 2002,"Robert C. Martin", "9780135974445", Category.WEB),
-				Book.create("Refactoring", BigDecimal.valueOf(24.99), 2019,"Martin Fowler", "9780201485677", Category.JAVA),
-				Book.create("Effective Java", BigDecimal.valueOf(54.99), 2017,"Joshua Bloch", "9780321356680", Category.JAVA)
+				new Book("Clean Code", BigDecimal.valueOf(37.44), 2008,"Robert C. Martin", "9780132350884", Category.WEB),
+				new Book("Agile Software Development", BigDecimal.valueOf(54.99), 2002,"Robert C. Martin", "9780135974445", Category.WEB),
+				new Book("Refactoring", BigDecimal.valueOf(24.99), 2019,"Martin Fowler", "9780201485677", Category.JAVA),
+				new Book("Effective Java", BigDecimal.valueOf(54.99), 2017,"Joshua Bloch", "9780321356680", Category.JAVA)
 		);
 
 		bookRepository.deleteAll().thenMany(
 				bookRepository.saveAll(books))
-					.thenMany(bookRepository.findAll())
-						.subscribe(
-							data -> logger.info("found books: {}", bookRepository),
-							error -> logger.error("" + error),
-							() -> logger.info(" -->> done books initialization...")
-						);
+				.thenMany(bookRepository.findAll())
+				.subscribe(
+						data -> logger.info("found books: {}", bookRepository),
+						error -> logger.error("" + error),
+						() -> logger.info(" -->> done books initialization...")
+				);
 
 		Address address = new Address();
 
@@ -91,12 +93,12 @@ public class DbPopulator {
 
 		accountRepository.deleteAll().thenMany(
 				accountRepository.saveAll(List.of(john, jane, admin)))
-					.thenMany(accountRepository.findAll())
-						.subscribe(
-							data -> logger.info("found accounts: {}", accountRepository),
-							error -> logger.error("" + error),
-							() -> logger.info(" -->> done accounts initialization...")
-						);
+				.thenMany(accountRepository.findAll())
+				.subscribe(
+						data -> logger.info("found accounts: {}", accountRepository),
+						error -> logger.error("" + error),
+						() -> logger.info(" -->> done accounts initialization...")
+				);
 	}
-}
 
+}

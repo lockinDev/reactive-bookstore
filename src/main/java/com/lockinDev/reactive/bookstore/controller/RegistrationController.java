@@ -19,7 +19,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-
+/**
+ * Created by lockinDev on 28/07/2020
+ */
 @Controller
 @RequestMapping("/customer/register")
 public class RegistrationController {
@@ -53,9 +55,8 @@ public class RegistrationController {
 		if (result.hasErrors()) {
 			return "customer/register";
 		}
-		// we are not interested in the result of this pipeline, we just want to make sure the user is saved,
-		// and we do not care how fast that happens
-		this.accountService.save(account).doOnNext(acc ->  logger.debug("Account saved")).then(Mono.empty()).subscribe();
+		this.accountService.save(account).doOnNext(acc ->  logger.debug("Account saved"))
+				.then(Mono.empty()).subscribe();
 		return "redirect:/login";
 	}
 

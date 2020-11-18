@@ -1,5 +1,13 @@
 
-package com.lockinDev.reactive.bookstore.repository;
+package com.lockinDev.reactive.bookstore.service;
+
+import com.lockinDev.reactive.bookstore.document.*;
+import com.lockinDev.reactive.bookstore.repository.AccountRepository;
+import com.lockinDev.reactive.bookstore.repository.BookRepository;
+import com.lockinDev.reactive.bookstore.repository.RepositoryTest;
+import com.lockinDev.reactive.bookstore.service.BookstoreService;
+import com.lockinDev.reactive.bookstore.service.BookstoreServiceImpl;
+import com.lockinDev.reactive.bookstore.util.BookSearchCriteria;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,14 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.Import;
-
-import com.lockinDev.reactive.bookstore.document.*;
-import com.lockinDev.reactive.bookstore.repository.AccountRepository;
-import com.lockinDev.reactive.bookstore.repository.BookRepository;
-import com.lockinDev.reactive.bookstore.service.BookstoreService;
-import com.lockinDev.reactive.bookstore.service.BookstoreServiceImpl;
-import com.lockinDev.reactive.bookstore.util.BookSearchCriteria;
-
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -24,11 +24,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * Created by lockinDev on 27/07/2020
+ */
 @DataMongoTest
 @Import(BookstoreServiceImpl.class)
 public class BookstoreServiceTest {
-	private final Logger logger = LoggerFactory.getLogger(BookstoreServiceTest.class);
+	private final Logger logger = LoggerFactory.getLogger(RepositoryTest.class);
 
 	@Autowired BookRepository bookRepository;
 	@Autowired AccountRepository accountRepository;
@@ -36,9 +38,9 @@ public class BookstoreServiceTest {
 
 	@BeforeEach
 	public void setup() {
-		var book1 = Book.create("Dummy Book One", BigDecimal.valueOf(23.39), 1983, "Dum Dum", "1111484227893", "Dum");
-		var book2 = Book.create("Dummy Book Two", BigDecimal.valueOf(30.99), 1974, "Dim Dim", "1111484229999", "Dim");
-		var book3 = Book.create("Dummy Book Three", BigDecimal.valueOf(50.99), 1942, "Dom Dom", "1111484228888", "Dim");
+		var book1 = new Book("Dummy Book One", BigDecimal.valueOf(23.39), 1983, "Dum Dum", "1111484227893", "Dum");
+		var book2 = new Book("Dummy Book Two", BigDecimal.valueOf(30.99), 1974, "Dim Dim", "1111484229999", "Dim");
+		var book3 = new Book("Dummy Book Three", BigDecimal.valueOf(50.99), 1942, "Dom Dom", "1111484228888", "Dim");
 
 		Address address = new Address();
 		address.setStreet("Test Street");
@@ -91,21 +93,6 @@ public class BookstoreServiceTest {
 	@Test
 	void testFindBooksNone(){
 		bookstoreService.findBooks(new BookSearchCriteria()).log().as(StepVerifier::create)
-				.expectNextCount(0)
-				.verifyComplete();
-	}
-
-	@Test
-	void testFindBookByIsbn() {
-		bookstoreService.findBookByIsbn("1111484228888").log().as(StepVerifier::create)
-				.expectNextCount(1)
-				.verifyComplete();
-	}
-
-	@Test
-	void testFindNoBookByIsbn() {
-		bookstoreService.findBookByIsbn("1111484221111").log().as(StepVerifier::create)
-				.expectNextCount(0)
 				.verifyComplete();
 	}
 

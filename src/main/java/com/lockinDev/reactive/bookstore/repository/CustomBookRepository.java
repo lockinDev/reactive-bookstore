@@ -7,7 +7,9 @@ import com.lockinDev.reactive.bookstore.document.Book;
 
 import reactor.core.publisher.Flux;
 
-
+/**
+ * Created by lockinDev on 26/07/2020
+ */
 public interface CustomBookRepository {
 	Flux<Book> findRandom(Pageable pageable);
 

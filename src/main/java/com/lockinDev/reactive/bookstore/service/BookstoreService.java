@@ -8,12 +8,16 @@ import java.util.List;
 import com.lockinDev.reactive.bookstore.document.*;
 import com.lockinDev.reactive.bookstore.util.BookSearchCriteria;
 
-
+/**
+ * Created by lockinDev on 27/07/2020
+ */
 public interface BookstoreService {
 
 	Flux<Book> findBooksByCategory(String category);
 
 	Mono<Book> findBook(String id);
+
+	Mono<Book> findBookByIsbn(String isbn);
 
 	Flux<Book> findRandomBooks();
 
@@ -29,8 +33,6 @@ public interface BookstoreService {
 
 	Mono<Void> deleteBook(String bookIsbn);
 
-	Mono<Book> findBookByIsbn(String isbn);
-
-	Mono<Void> updateByIsbn(String isbn, Mono<Book> bookMono);
+	Flux<Book> randomBookNews();
 
 }
